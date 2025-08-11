@@ -13,7 +13,7 @@ const (
 	Bad bayesian.Class = "notIng"
 )
 
- var ValueMaps = map[int]string{0:"Ing", 1:"notIng"}
+var ValueMaps = map[int]string{0:"Ing", 1:"notIng"}
 
 func trainBayes() {
 	notIngri := generateStringSlices("notIngredient.txt")
@@ -55,6 +55,12 @@ func trainBayes() {
 	classifier.WriteToFile("model/model.mo")
 }
 
+func IsIngredient(input string) bool {
+	classifier, _ := bayesian.NewClassifierFromFile("model/model.mo")
+	parts := strings.Split(input, " ")
+	_, likely, _ := classifier.LogScores(parts)
+	return likely == 0
+}
 
 func generateStringSlices(fileName string) []string {
 	var notIngri []string
