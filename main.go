@@ -37,6 +37,8 @@ var memory Memory = Memory{Items: [3]string{},
 var Ings []string = []string{}
 
 func main() {
+
+	trainBayes()
 	fmt.Println("Input a Link you want to find the recipe of!")
 	c := colly.NewCollector()
 	leftovers := [3]string{"", "", ""}
