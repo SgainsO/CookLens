@@ -6,6 +6,7 @@ import (
 	"os"
 	"bufio"
 	"strings"
+	"strconv"
 )
 
 const (
@@ -13,7 +14,68 @@ const (
 	Bad bayesian.Class = "notIng"
 )
 
+var RecipeWords map[string]int = make(map[string]int)
 var ValueMaps = map[int]string{0:"Ing", 1:"notIng"}
+
+func isNumeric(s string) bool {
+	_, err := strconv.ParseFloat(s, 64) // Try to parse as a float64
+	return err == nil
+}
+
+func EvaluateSentence(Sentence string) bool{
+	points := 0
+	sentence := deleteBadCharacters(strings.ToLower(Sentence))
+	senArray := strings.Split(sentence, " ")
+	amountWord := len(senArray)
+
+	if amountWord < 2 {
+	 points += 2
+	}else if  amountWord < 6 {
+		points += 1			//Inbetween these answers, it just doesn't gain a point
+	}else if amountWord > 10{
+		return false
+	}
+
+	for _, word := range senArray {
+		if RecipeWords[word] == 1 || isNumeric(word){
+			points += 1
+		}
+	}
+
+	if points > 3{
+		return true
+	}else{
+		return false
+	}
+}
+
+func deleteBadCharacters(sentence string) string {
+	strings.NewReplacer("(", " ", ")"," ", "!", "", "#", "")
+	return strings.ReplaceAll(sentence, ".", "")
+}
+
+func LoadPositives() {
+	RecipeWords = fileIntoPositiveWords("dictionaries/amount.txt", RecipeWords)
+	RecipeWords = fileIntoPositiveWords("dictionaries/ingre.txt", RecipeWords)
+}
+
+func fileIntoPositiveWords(path string, mapTo map[string]int) map[string]int{
+	f1, _ := os.Open(path)
+
+	scanner := bufio.NewScanner(f1)
+	for scanner.Scan() {
+		word := scanner.Text()
+		if word != "" {
+			mapTo[word] = 1
+		}
+	}
+	if err := scanner.Err(); err != nil {
+		fmt.Println("Error reading file:", err)
+	}
+
+	return mapTo
+}
+
 
 func trainBayes() {
 	notIngri := generateStringSlices("notIngredient.txt")
@@ -55,11 +117,15 @@ func trainBayes() {
 	classifier.WriteToFile("model/model.mo")
 }
 
-func IsIngredient(input string) bool {
+func IsIngredientOLD(input string) bool {
 	classifier, _ := bayesian.NewClassifierFromFile("model/model.mo")
 	parts := strings.Split(input, " ")
 	_, likely, _ := classifier.LogScores(parts)
 	return likely == 0
+}
+
+func IsIngredient(input string) bool {
+	return EvaluateSentence(input)
 }
 
 func generateStringSlices(fileName string) []string {

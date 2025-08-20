@@ -1,135 +1,527 @@
-1 pound skinless, boneless chicken breast halves
-1 (15.25 ounce) can whole kernel corn, drained
-1 (14.5 ounce) can diced tomatoes, undrained
-1 (14.5 ounce) can chicken broth
-1 (10 ounce) can enchilada sauce
-1 white onion, chopped
-1 (4 ounce) can diced green chiles
-1/4 cup chopped fresh cilantro
-3 cloves garlic, minced
-2 bay leaves
-1 teaspoon ground cumin
-1 teaspoon chili powder
-1 teaspoon salt
-1/4 teaspoon ground black pepper
-2 tablespoons light brown sugar
-1/2 teaspoon paprika
-1/2 teaspoon garlic powder
-1/4 teaspoon cayenne pepper
-1/4 cup panko breadcrumbs
-1/2 cup parsley leaves, chopped
-2 tablespoons unsalted butter, melted
-1 1/2 pounds skin-on salmon fillet, center-cut
-1 tablespoon Dijon mustard
-4 ounces cream cheese, room temperature
-2 scallions, thinly sliced
-12 ounces wide egg noodles
-5 ounces canned white albacore tuna, drained
-6 ounces cremini mushrooms, sliced
-1 1/2 cups frozen peas, thawed
-8 ounces mild cheddar cheese, shredded
-2 1/2 cups low-sodium chicken broth
-3/4 cup heavy cream
-1/2 cup sour cream
-3 tablespoons taco seasoning
-1 tablespoon olive oil
-1 1/2 pounds boneless skinless chicken breasts
-1 large onion, sliced
-1/3 cup barbecue sauce
-6 flour tortillas, 8-inch
-2 cups shredded monterey jack cheese
-1/2 pound bacon, cooked and crumbled
-1 1/2 pounds fresh broccoli florets
-4 tablespoons extra-virgin olive oil
-2 teaspoons soy sauce
-1 garlic clove, thinly sliced
-1/2 cup chopped cashews
-1 tablespoon chile crisp
-1/3 cup panko bread crumbs
-14 ounces silken tofu, drained
-1 cup cashew butter
-4 boneless, skinless chicken thighs
-3 garlic cloves, grated
-1 lime, juiced
-1 tablespoon hot sauce
-1 teaspoon onion powder
-4 tablespoons vegetable oil
-8 corn tortillas, warmed
-2 teaspoons vanilla extract
-1/2 cup brown sugar
-1 pound ground beef
-1 medium onion, diced
-3 large eggs
-2 cups all-purpose flour
-1 cup whole milk
-1/4 cup maple syrup
-1 cup shredded carrots
-1 can black beans, drained and rinsed
-1 cup sliced mushrooms
-1 bell pepper, diced
-1/3 cup rolled oats
-2 tablespoons tomato paste
-1 lemon, zested
-1/2 cup Greek yogurt
-1 teaspoon ground cumin
-1/4 teaspoon ground nutmeg
-1 small zucchini, chopped
-2 cups fresh spinach
-1 tablespoon apple cider vinegar
-2 cups vegetable broth
-1/2 cup chopped walnuts
-1 avocado, mashed
-1 tablespoon honey
-1 teaspoon baking powder
-1 teaspoon baking soda
-1 teaspoon cinnamon
-2 tablespoons lemon juice
-1/4 cup grated parmesan cheese
-1/2 teaspoon red pepper flakes
-4 Roma tomatoes
-5 large strawberries
-1/3 cup melted butter
-1 cup shredded mozzarella cheese
-2 tablespoons sesame oil
-1/4 cup rice vinegar
-3 tablespoons cornstarch
-1 tablespoon fresh ginger, grated
-2 green onions, sliced
-1/2 cup coconut milk
-1 tablespoon fish sauce
-2 tablespoons brown sugar
-1 Thai chile, minced
-1/4 cup fresh basil leaves
-1 pound pork shoulder, cubed
-2 cups jasmine rice
-1 cinnamon stick
-3 whole cloves
-2 star anise pods
-1 tablespoon whole coriander seeds
-1 teaspoon turmeric powder
-1/2 cup heavy cream
-1 pound dried pasta
-1/4 cup pine nuts
-1 bunch fresh basil
-1/2 cup extra-virgin olive oil
-3 garlic cloves
-1/2 cup freshly grated parmesan
-1 tablespoon butter
-1 pound flank steak
-2 tablespoons balsamic vinegar
-1 red bell pepper, sliced
-1 yellow bell pepper, sliced
-1 red onion, sliced
-2 tablespoons canola oil
-1 teaspoon dried oregano
-1/2 teaspoon smoked paprika
-1 pound large shrimp, peeled
-2 tablespoons cajun seasoning
-4 cups cooked white rice
-2 celery stalks, diced
-1/4 cup fresh thyme leaves
-1 pound andouille sausage, sliced
-1 cup long-grain white rice
-3 cups chicken stock
-1 bay leaf
-1/4 teaspoon saffron threads
+teaspoon
+tsp
+tablespoon
+tbsp
+cup
+cups
+pint
+pt
+quart
+qt
+gallon
+gal
+ounce
+oz
+pound
+lb
+gram
+g
+kilogram
+kg
+liter
+l
+litre
+milliliter
+ml
+millilitre
+fluid
+fl
+pinch
+dash
+smidgen
+drop
+drops
+inch
+in
+centimeter
+cm
+fahrenheit
+celsius
+handful
+splash
+dollop
+knob
+clove
+cloves
+head
+bunch
+bunches
+stalk
+stalks
+stick
+sticks
+sheet
+sheets
+can
+cans
+tin
+tins
+package
+packages
+packet
+packets
+bottle
+bottles
+jar
+jars
+slice
+slices
+piece
+pieces
+strip
+strips
+wedge
+wedges
+chunk
+chunks
+cube
+cubes
+sprig
+sprigs
+leaf
+leaves
+bag
+bags
+box
+boxes
+container
+containers
+serving
+servings
+portion
+portions
+scoop
+scoops
+ladle
+measure
+shot
+shots
+jigger
+barrel
+gallon
+quarts
+pints
+fluid
+ounces
+pounds
+grams
+kilograms
+liters
+milliliters
+teaspoons
+tablespoons
+whole
+half
+quarter
+third
+eighths
+sixths
+dozen
+dozens
+large
+medium
+small
+extra
+jumbo
+mini
+fresh
+dried
+frozen
+canned
+bottled
+ground
+chopped
+diced
+sliced
+shredded
+grated
+minced
+crushed
+mashed
+pureed
+juice
+zest
+rind
+peel
+ackee
+adzuki
+adzukibean
+agar
+agarwood
+aioli
+aji
+ajiamarillo
+ajwain
+aleppo
+all
+allspice
+almond
+almondoil
+aloe
+amaranth
+amchur
+anardana
+anchovy
+anise
+apple
+apricot
+arrowroot
+arugula
+asafoetida
+ashwagandha
+avocadooil
+banana
+barberry
+barley
+basil
+bayleaf
+beans
+beef
+berbere
+bhutjolokia
+birdseye
+blackberry
+blackeyedpea
+blueberry
+bokchoy
+brazilnut
+bread
+breadfruit
+brie
+broccoli
+buckwheat
+burdock
+butter
+buttermilk
+button
+cabbage
+cacao
+cactus
+camembert
+canola
+caraway
+cardamom
+carolina
+carrot
+cashew
+cassava
+catfish
+cayenne
+celery
+chana
+chanterelle
+chayote
+cheddar
+cheese
+chermoula
+cherry
+chestnut
+chia
+chicken
+chickpea
+chili
+chipotle
+chive
+chlorella
+chocolate
+choysum
+chutney
+cilantro
+cinnamon
+clabber
+clam
+clove
+coconut
+coconutoil
+cod
+coffee
+corn
+cowpea
+crab
+cranberrybean
+crawfish
+cream
+crimini
+cubeb
+cucumber
+cumin
+curry
+cuttlefish
+daikon
+date
+dill
+dragonfruit
+dukkah
+dulse
+durian
+edamame
+eel
+egg
+endive
+enoki
+epazote
+farro
+fava
+fennel
+fenugreek
+fermented
+feta
+fieldpea
+fig
+fish
+flaxseed
+flounder
+flour
+fonio
+frankincense
+freekeh
+furikake
+gai
+galangal
+garlic
+ghee
+ginger
+gingerroot
+ginseng
+gochujang
+gorgonzola
+grainsofparadise
+grape
+grapeseed
+grouper
+guacamole
+guar
+guava
+habanero
+haddock
+halibut
+halloumi
+harissa
+hazelnut
+hemp
+herring
+hibiscus
+honey
+horseradish
+hummus
+jackfruit
+jalapeno
+jerusalemartichoke
+jicama
+juniper
+kaffir
+kale
+kamut
+katsuobushi
+kefir
+ketchup
+kidneybean
+kimchi
+kiwi
+kokum
+kombu
+krill
+lassi
+leek
+lemon
+lemongrass
+lentil
+lettuce
+lime
+lobster
+longan
+longpepper
+lotus
+lovage
+lupin
+lychee
+macadamia
+mace
+mackerel
+mahlab
+maitake
+malanga
+manchego
+mango
+marjoram
+marmite
+mascarpone
+masoor
+mate
+mayonnaise
+melon
+milk
+millet
+mint
+miso
+mizuna
+molasses
+moong
+morel
+mozzarella
+mung
+mungbean
+mushroom
+mussel
+mustard
+mustardoil
+myrrh
+natto
+navybean
+nigella
+nopale
+nori
+nutmeg
+oat
+powder
+octopus
+oil
+okra
+olive
+onion
+orange
+oregano
+oyster
+palm
+paneer
+paprika
+parmesan
+parsley
+parsnip
+passionfruit
+peach
+peanut
+peanutoil
+pear
+peas
+pecan
+pecorino
+pepper
+persimmon
+pesto
+pickled
+pineapple
+pintobean
+pistachio
+plantain
+plum
+poblano
+pollock
+pomegranate
+poppyseed
+porcini
+pork
+portobello
+potato
+prawn
+pricklypear
+pumpkin
+pumpkinseed
+quark
+quinoa
+radish
+rambutan
+raselhanout
+raspberry
+reishi
+relish
+rice
+ricotta
+rocoto
+rooibos
+rosemary
+rye
+safflower
+saffron
+sage
+salmon
+salsa
+salsify
+salt
+sapote
+sardine
+sauerkraut
+scallion
+scallop
+scorpion
+seaweed
+seitan
+serrano
+sesame
+sesameoil
+sesameseed
+shallot
+shichimi
+shiitake
+shiso
+shrimp
+silphium
+smoked
+snapper
+sole
+sorghum
+sorrel
+soursop
+soy
+soybean
+spelt
+spinach
+spirulina
+squash
+squid
+sriracha
+starfruit
+stilton
+strawberry
+sugar
+sumac
+sunflower
+sunflowerseed
+swordfish
+szechuan
+tabasco
+tahini
+tamari
+tamarillo
+tamarind
+tapioca
+taro
+tarragon
+tatsoi
+tea
+teff
+tejpat
+tellicherry
+tempeh
+thyme
+tilapia
+tofu
+tomato
+trinidad
+triticale
+trout
+truffle
+tuna
+turmeric
+turmericroot
+turnip
+umeboshi
+urad
+urfa
+vanilla
+vegemite
+verjuice
+vinegar
+wakame
+walnut
+walnutoil
+wasabi
+watercress
+watermelon
+wheat
+xanthan
+yam
+yogurt
+yuzu
+zaatar
+zucchini
