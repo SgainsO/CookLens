@@ -85,6 +85,7 @@ func main() {
 						Recipe = AddToSlice(item, Recipe)
 					}
 				}
+				fmt.Printf("Before entering")
 				leftoverSet, leftovers = handleLeftovers(leftoverSet, leftovers)
 				memory.ClearMemory()
 			}
@@ -103,32 +104,28 @@ func PrintAllInSlice(s []string) {
 
 func handleLeftovers(leftoverSet bool, leftovers [3]string) (bool, [3]string) {
 
-	if memory.Amt_Correct(1) == 2  || memory.Amt_Correct(2) == 2 {
-		leftoverSet = true // May have a leftover set
-		leftovers = memory.Items
-	}
-
-	if leftoverSet || memory.Amt_Correct(1) <= 1 {
-		Ings = memory.ReturnLeftovers(Ings, 1)
-		leftoverSet = false // They were indeed leftovers
-	}else if memory.Amt_Correct(2) <= 1 {
-		Recipe = memory.ReturnLeftovers(Recipe, 2)
-		leftoverSet = false // They were indeed leftovers
-	}else { //This will only run when the array has three positives
-		if memory.Amt_Correct(1) > memory.Amt_Correct(2) {
-			for _, value := range leftovers {
-				Ings = AddToSlice(value, Ings)
-			} //Adds to which ever the false negative actually belonged to
-		}else {
-			for _, value := range leftovers {
-				Recipe = AddToSlice(value, Recipe)
+	//This patch runs first, will always be wrong
+	fmt.Printf("%d %d correct", leftoverSet, memory.Amt_Correct(1))
+	if leftoverSet && memory.Amt_Correct(1) >= 1 {
+		fmt.Println("Initial leftoverset found")
+		for i := 0; i < len(leftovers); i++ {
+			if leftovers[i] != "" {
+				Ings = AddToSlice(leftovers[i], Ings)
 			}
 		}
-
-		fmt.Println("Seeing if this actually runs")
-
-		leftoverSet = false
+		Ings = memory.ReturnLeftovers(Ings, 1)
+	}else if leftoverSet && memory.Amt_Correct(2) >= 1 {
+		Recipe = memory.ReturnLeftovers(Recipe, 2)
 	}
+	leftoverSet = false
+
+
+	if memory.Amt_Correct(1) >= 1 && memory.Amt_Correct(1) < 3{
+		leftoverSet = true // May have a leftover set
+		leftovers = memory.Items
+		fmt.Printf("leftover set found, setting to true")
+	}
+
 	return leftoverSet, leftovers
 }
 
