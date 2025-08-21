@@ -8,16 +8,25 @@ import (
 )
 
 type Memory struct {
+	Amt         int8
 	Items       [3]string
 	Item_Type   [3]int8 //0  is not Ing, 1 is Ing
-	Amt         int8
-	Amt_Correct int8
 }
 
-func (m Memory) ReturnLeftovers(s []string) []string {
+func (m Memory) Amt_Correct(typeNum int8) int8 {
+	newAmt := int8(0)
+	for _, value := range m.Item_Type{
+		if value == typeNum {
+			newAmt++
+		}
+	}
+	return newAmt
+}
+
+func (m Memory) ReturnLeftovers(s []string, toRet int8) []string {
 	for index, value := range m.Items {
-		if m.Item_Type[index] == 1 {
-			s = AddToIngSlice(value)
+		if m.Item_Type[index] == toRet {
+			s = AddToSlice(value, s)
 		} else {
 			break
 		}
@@ -26,15 +35,15 @@ func (m Memory) ReturnLeftovers(s []string) []string {
 }
 func (m *Memory) ClearMemory() {
 	m.Items = [3]string{}
-	m.Amt_Correct = 0
 	m.Amt = 0
 	fmt.Println("Memory cleared")
 }
 
 var memory Memory = Memory{Items: [3]string{},
-	Item_Type: [3]int8{}, Amt: 0, Amt_Correct: 0}
+	Item_Type: [3]int8{}, Amt: 0}
 
 var Ings []string = []string{}
+var Recipe []string = []string{}
 
 func main() {
 
@@ -57,17 +66,23 @@ func main() {
 		trimmedText := strings.TrimSpace(e.Text)
 		if trimmedText != "" {
 			if IsIngredient(trimmedText) {
-				memory.Amt_Correct++
 				memory.AddToMemory(trimmedText, 1)
 				fmt.Printf("%s registered!\n", trimmedText)
 			}else {
+				fmt.Println("XXX: ", trimmedText)
 				memory.AddToMemory(trimmedText, 0)
 			}
 
 			if memory.Amt == 3 {
-				if memory.Amt_Correct == 3{
+				if memory.Amt_Correct(1) == 3{
+					fmt.Println("This is running")
 					for _, item := range memory.Items {
-						AddToIngSlice(item)
+						Ings = AddToSlice(item, Ings)
+					}
+				}
+				if memory.Amt_Correct(2) == 3{
+					for _, item := range memory.Items {
+						Recipe = AddToSlice(item, Recipe)
 					}
 				}
 				leftoverSet, leftovers = handleLeftovers(leftoverSet, leftovers)
@@ -88,28 +103,38 @@ func PrintAllInSlice(s []string) {
 
 func handleLeftovers(leftoverSet bool, leftovers [3]string) (bool, [3]string) {
 
-	if memory.Amt_Correct == 2 {
+	if memory.Amt_Correct(1) == 2  || memory.Amt_Correct(2) == 2 {
 		leftoverSet = true // May have a leftover set
 		leftovers = memory.Items
 	}
 
-	if leftoverSet || memory.Amt_Correct <= 2 {
-		Ings = memory.ReturnLeftovers(Ings)
+	if leftoverSet || memory.Amt_Correct(1) <= 1 {
+		Ings = memory.ReturnLeftovers(Ings, 1)
 		leftoverSet = false // They were indeed leftovers
-	} else {
-		// Wasn't leftovers, most likely a false positive
-		fmt.Println("Seeing if this actually runs")
-		for _, value := range leftovers {
-			Ings = AddToIngSlice(value)
+	}else if memory.Amt_Correct(2) <= 1 {
+		Recipe = memory.ReturnLeftovers(Recipe, 2)
+		leftoverSet = false // They were indeed leftovers
+	}else { //This will only run when the array has three positives
+		if memory.Amt_Correct(1) > memory.Amt_Correct(2) {
+			for _, value := range leftovers {
+				Ings = AddToSlice(value, Ings)
+			} //Adds to which ever the false negative actually belonged to
+		}else {
+			for _, value := range leftovers {
+				Recipe = AddToSlice(value, Recipe)
+			}
 		}
+
+		fmt.Println("Seeing if this actually runs")
+
 		leftoverSet = false
 	}
 	return leftoverSet, leftovers
 }
 
-func AddToIngSlice(ing string) []string {
-	Ings = append(Ings, ing)
-	return Ings
+func AddToSlice(ing string, s []string) []string {
+	newSlice := append(s, ing)
+	return newSlice
 }
 
 func (memory *Memory) AddToMemory(ing string, corState int8) {
@@ -128,4 +153,6 @@ func search(link string, col *colly.Collector, bModel *bayesian.Classifier) {
 	col.Visit(link)
 	fmt.Println("Ended search")
 	PrintAllInSlice(Ings)
+	fmt.Println("-----------------")
+	PrintAllInSlice(Recipe)
 }
