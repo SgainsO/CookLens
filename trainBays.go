@@ -10,12 +10,12 @@ import (
 )
 
 const (
-	Good bayesian.Class = "Ing"
-	Bad bayesian.Class = "notIng"
+	Good bayesian.Class = "Rep"
+	Bad bayesian.Class = "NotRep"
 )
 
 var RecipeWords map[string]int = make(map[string]int)
-var ValueMaps = map[int]string{0:"Ing", 1:"notIng"}
+var ValueMaps = map[int]string{0:"Rep", 1:"NotRep"}
 
 func isNumeric(s string) bool {
 	_, err := strconv.ParseFloat(s, 64) // Try to parse as a float64
@@ -77,9 +77,9 @@ func fileIntoPositiveWords(path string, mapTo map[string]int) map[string]int{
 }
 
 
-func trainBayes() {
-	notIngri := generateStringSlices("notIngredient.txt")
-	Ingri := generateStringSlices("Ingredient.txt")
+func main_hide() {
+	notIngri := generateStringSlices("notRecipe.txt")
+	Ingri := generateStringSlices("recipe.txt")
 
 	classifier := bayesian.NewClassifier(Good, Bad)
 	classifier.Learn(notIngri, Bad)
@@ -97,7 +97,7 @@ func trainBayes() {
 	for key, value := range testData {
 		total++
 		_, likely, _ := classifier.LogScores(strings.Split(key, " "))
-		if value == "Ing"{ings += 1} else if value == "notIng"{notIngs += 1}
+		if value == "Rep"{ings += 1} else if value == "notRep"{notIngs += 1}
 
 		if value == ValueMaps[likely] {		//Since Classifier returns an array
 			correct++

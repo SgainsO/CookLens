@@ -46,8 +46,7 @@ var Ings []string = []string{}
 var Recipe []string = []string{}
 
 func main() {
-
-	trainBayes()
+	AssignWordLists()
 	LoadPositives()
 	fmt.Println("Input a Link you want to find the recipe of!")
 	c := colly.NewCollector()
@@ -67,11 +66,17 @@ func main() {
 		if trimmedText != "" {
 			if IsIngredient(trimmedText) {
 				memory.AddToMemory(trimmedText, 1)
-				fmt.Printf("%s registered!\n", trimmedText)
-			}else {
-				fmt.Println("XXX: ", trimmedText)
+		//		fmt.Printf("%s registered!\n", trimmedText)
+			} else if IsInstruction(trimmedText) {
+				memory.AddToMemory(trimmedText, 2)
+				fmt.Printf("%s INSTRUCTION \n", trimmedText)
+			} else {
 				memory.AddToMemory(trimmedText, 0)
+				fmt.Printf("%s other\n", trimmedText)
+
 			}
+
+
 
 			if memory.Amt == 3 {
 				if memory.Amt_Correct(1) == 3{
@@ -105,9 +110,9 @@ func PrintAllInSlice(s []string) {
 func handleLeftovers(leftoverSet bool, leftovers [3]string) (bool, [3]string) {
 
 	//This patch runs first, will always be wrong
-	fmt.Printf("%d %d correct", leftoverSet, memory.Amt_Correct(1))
+//	fmt.Printf("%d %d correct", leftoverSet, memory.Amt_Correct(1))
 	if leftoverSet && memory.Amt_Correct(1) >= 1 {
-		fmt.Println("Initial leftoverset found")
+//		fmt.Println("Initial leftoverset found")
 		for i := 0; i < len(leftovers); i++ {
 			if leftovers[i] != "" {
 				Ings = AddToSlice(leftovers[i], Ings)
@@ -123,7 +128,7 @@ func handleLeftovers(leftoverSet bool, leftovers [3]string) (bool, [3]string) {
 	if memory.Amt_Correct(1) >= 1 && memory.Amt_Correct(1) < 3{
 		leftoverSet = true // May have a leftover set
 		leftovers = memory.Items
-		fmt.Printf("leftover set found, setting to true")
+//		fmt.Printf("leftover set found, setting to true")
 	}
 
 	return leftoverSet, leftovers
