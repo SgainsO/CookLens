@@ -70,7 +70,7 @@ func fileIntoPositiveWords(path string, mapTo map[string]int) map[string]int{
 		}
 	}
 	if err := scanner.Err(); err != nil {
-		fmt.Println("Error reading file:", err)
+	//	fmt.Println("Error reading file:", err)
 	}
 
 	return mapTo

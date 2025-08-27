@@ -1,6 +1,6 @@
 package main
 import (
-	"fmt"
+//	"fmt"
 	"os"
 	"bufio"
 	"strings"
@@ -36,7 +36,7 @@ func IsInstruction(instructionParagraph string) bool{
 		total++
 	}
 	strug := float32(confIns) / float32(total)
-	fmt.Println(strug)
+	//fmt.Println(strug)
 	if strug > float32(0.5) {
 		return true
 	} else {
@@ -63,18 +63,21 @@ func loadList(filename string) ([]string, error) {
 func checkSentence(ins string) bool {
 	targetsMet := 0
 	ins_arr := strings.Split(ins, " ")
+	if ins_arr[0] == "add" {
+		return true		//Chances are far more likely than not that it is a recipe
+	}
 	for _, word := range ins_arr {
 		word = strings.ToLower(word)
 		if checkWordInArray(word, cookingVerbs){
-			fmt.Println(word)
+	//		fmt.Println(word)
 			targetsMet += 2
 		}
 		if checkWordInArray(word, tools){
-			fmt.Println(word)
+	//		fmt.Println(word)
 			targetsMet += 1
 		}
 		if checkWordInArray(word, timeMarkers){
-			fmt.Println(word)
+	//		fmt.Println(word)
 			targetsMet += 1
 		}
 	}
