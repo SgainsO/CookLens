@@ -1,9 +1,8 @@
-package main
+package scrape
 
 import (
 	"fmt"
 	"strings"
-
 	"github.com/gocolly/colly"
 )
 
@@ -117,21 +116,34 @@ func ParseRecipeFromURL(url string, ings *[]ItemHolder, recipe *[]ItemHolder) er
 	return nil
 }
 
-func main() {
+func Scrape(url string) ([]string, []string) {
 	var ings []ItemHolder = []ItemHolder{}
 	var recipe []ItemHolder = []ItemHolder{}
 
 	fmt.Println("Input a Link you want to find the recipe of!")
-	err := ParseRecipeFromURL("https://www.recipetineats.com/mexican-corn-salad/", &ings, &recipe)
+	err := ParseRecipeFromURL(url, &ings, &recipe)
 	if err != nil {
 		fmt.Printf("Error parsing recipe: %v\n", err)
-		return
+		return []string{}, []string{}
 	}
+    var ret_ings []string = []string{}
+    var ret_rec []string = []string{}
+    for ind := 0; ind < len(ings); ind++ {
+        ret_ings = append(ret_ings, ings[ind].item)
+    }
+
+    for ind := 0; ind < len(recipe); ind++ {
+        ret_rec = append(ret_rec, recipe[ind].item)
+    }
+
+
 
 	fmt.Println("Ended search")
 	PrintAllItemHolders(ings)
 	fmt.Println("-----------------")
 	PrintAllItemHolders(recipe)
+
+	return ret_ings, ret_rec
 }
 
 func PrintAllInSlice(s []string) {

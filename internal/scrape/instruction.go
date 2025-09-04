@@ -1,4 +1,4 @@
-package main
+package scrape
 import (
 //	"fmt"
 	"os"
@@ -11,9 +11,9 @@ var tools []string = []string{}
 var timeMarkers []string = []string{}
 
 func AssignWordLists() {
-	cookingVerbs, _ = loadList("dictionaries/verbs.txt")
-	tools, _ = loadList("dictionaries/tools.txt")
-	timeMarkers, _ = loadList("dictionaries/time.txt")
+	cookingVerbs, _ = loadList("../dictionaries/verbs.txt")
+	tools, _ = loadList("../dictionaries/tools.txt")
+	timeMarkers, _ = loadList("../dictionaries/time.txt")
 }
 
 func checkWordInArray(word string, array []string) bool {
