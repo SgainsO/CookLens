@@ -36,18 +36,41 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       home: Scaffold(
-        body: RecipeTitleContainer(),
+        body: Row(children: [ Expanded(flex: 3, child: RecipTitleContainer()),
+         Expanded(flex: 2, child: IngreTitleContainer())],)
       ),
     );
   }
 }
 
-class RecipeTitleContainer extends StatelessWidget {
+class IngreTitleContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(16.0),
-      color: Colors.deepPurple,
+      color: const Color.fromARGB(255, 179, 164, 205),
+      child: Column(
+        children: [
+          Text(
+            'Ingre List',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ), // <- Added missing closing parenthesis and comma
+          Expanded(child: IngreContainer()), // <- Make sure this widget exists
+        ],
+      ),
+    );
+  }
+}
+
+class RecipTitleContainer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(padding: EdgeInsets.all(16),
+    color: const Color.fromARGB(255, 179, 164, 205),
       child: Column(
         children: [
           Text(
@@ -64,13 +87,58 @@ class RecipeTitleContainer extends StatelessWidget {
     );
   }
 }
+
+
+
+  class IngreContainer extends StatefulWidget {
+    @override
+    State<IngreContainer> createState() => _IngreContainerState();
+  }
+
   class RecipeContainer extends StatefulWidget {
     @override
     State<RecipeContainer> createState() => _RecipeContainerState();
   }
 
   class _RecipeContainerState extends State<RecipeContainer> {
-    List<String> recipes = [
+      List<String> recips = [
+    "Preheat the oven to 375°F (190°C).",
+    "Chop onions, tomatoes, and garlic finely.",
+    "Heat 2 tablespoons of olive oil in a pan.",
+    "Add onions and sauté until golden brown.",
+    "Stir in garlic and cook for 1 more minute.",
+    "Add chopped tomatoes and simmer for 10 minutes.",
+    "Season with salt, pepper, and oregano.",
+    "Boil pasta in salted water until al dente.",
+    "Drain pasta and mix with the tomato sauce.",
+    "Grate parmesan cheese on top before serving.",
+    "Whisk eggs and milk together in a bowl.",
+    "Dip bread slices into egg mixture and fry until golden.",
+    "Melt butter in a pan and cook pancakes until bubbly.",
+    "Mix flour, sugar, and baking powder in a bowl.",
+    "Add milk and eggs to form a smooth batter.",
+    "Pour batter into a greased baking dish.",
+    "Bake for 30 minutes until golden and set.",
+    "Marinate chicken with lemon juice and spices.",
+    "Grill chicken on medium heat for 6–8 minutes each side.",
+    "Serve hot with rice or salad."
+  ];
+
+    @override 
+    Widget build(BuildContext context) {
+      return ListView.builder(
+        itemCount: recips.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(recips[index]),
+          );
+        },
+      );
+    }
+  } 
+
+  class _IngreContainerState extends State<IngreContainer> {
+    List<String> Ingres = [
       'Spaghetti Carbonara',
       'Chicken Alfredo',
       'Beef Stroganoff',
@@ -86,10 +154,10 @@ class RecipeTitleContainer extends StatelessWidget {
     @override
     Widget build(BuildContext context) {
      return ListView.builder(
-      itemCount: recipes.length,
+      itemCount: Ingres.length,
       itemBuilder: (context, index) {
         return ListTile(
-          title: Text(recipes[index]),
+          title: Text(Ingres[index]),
         );
       },
     );
