@@ -3,6 +3,7 @@ package scrape
 import (
 	"fmt"
 	"strings"
+
 	"github.com/gocolly/colly"
 )
 
@@ -116,7 +117,7 @@ func ParseRecipeFromURL(url string, ings *[]ItemHolder, recipe *[]ItemHolder) er
 	return nil
 }
 
-func Scrape(url string) ([]string, []string) {
+func Scrape(url string) ([]string, []string, bool) {
 	var ings []ItemHolder = []ItemHolder{}
 	var recipe []ItemHolder = []ItemHolder{}
 
@@ -124,26 +125,24 @@ func Scrape(url string) ([]string, []string) {
 	err := ParseRecipeFromURL(url, &ings, &recipe)
 	if err != nil {
 		fmt.Printf("Error parsing recipe: %v\n", err)
-		return []string{}, []string{}
+		return []string{}, []string{}, false
 	}
-    var ret_ings []string = []string{}
-    var ret_rec []string = []string{}
-    for ind := 0; ind < len(ings); ind++ {
-        ret_ings = append(ret_ings, ings[ind].item)
-    }
+	var ret_ings []string = []string{}
+	var ret_rec []string = []string{}
+	for ind := 0; ind < len(ings); ind++ {
+		ret_ings = append(ret_ings, ings[ind].item)
+	}
 
-    for ind := 0; ind < len(recipe); ind++ {
-        ret_rec = append(ret_rec, recipe[ind].item)
-    }
-
-
+	for ind := 0; ind < len(recipe); ind++ {
+		ret_rec = append(ret_rec, recipe[ind].item)
+	}
 
 	fmt.Println("Ended search")
 	PrintAllItemHolders(ings)
 	fmt.Println("-----------------")
 	PrintAllItemHolders(recipe)
 
-	return ret_ings, ret_rec
+	return ret_ings, ret_rec, true
 }
 
 func PrintAllInSlice(s []string) {

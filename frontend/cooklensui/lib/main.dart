@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 void main() {
   runApp(const MyApp());
@@ -36,14 +38,60 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       home: Scaffold(
-        body: Row(children: [ Expanded(flex: 3, child: RecipTitleContainer()),
-         Expanded(flex: 2, child: IngreTitleContainer())],)
+        body: MasterWidget(),
       ),
     );
   }
 }
 
+class MasterWidget extends StatefulWidget {
+  @override
+  _MasterWidgetState createState() => _MasterWidgetState(); 
+}
+
+class _MasterWidgetState extends State<MasterWidget>{
+  Map<String, List<String>> allData = {};
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchAllData();
+  }
+
+
+  fetchAllData() async {
+    final response = await http.get(Uri.parse('http://127.0.0.1:8080/scrape'));
+    final data = json.decode(response.body);
+    setState(() {
+      allData = {
+        'recipe': List<String>.from(data['recipe']),
+        'ingredients': List<String>.from(data['ingredients'])
+      };
+      isLoading = false;
+    });
+
+  }
+  @override
+  Widget build(BuildContext context)
+  {
+    if (isLoading) return Center(child: CircularProgressIndicator());
+    
+    return Scaffold(
+        body: Row(children: [ 
+          Expanded(flex: 3, child: RecipTitleContainer(recipes: allData['recipe'] ?? [])),
+          Expanded(flex: 2, child: IngreTitleContainer(ingredients: allData['ingredients'] ?? []))
+        ],)
+      );
+  }
+
+}
+
 class IngreTitleContainer extends StatelessWidget {
+  final List<String> ingredients;
+  
+  IngreTitleContainer({required this.ingredients});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -59,7 +107,7 @@ class IngreTitleContainer extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ), // <- Added missing closing parenthesis and comma
-          Expanded(child: IngreContainer()), // <- Make sure this widget exists
+          Expanded(child: IngreContainer(ingredients: ingredients)), // <- Make sure this widget exists
         ],
       ),
     );
@@ -67,6 +115,10 @@ class IngreTitleContainer extends StatelessWidget {
 }
 
 class RecipTitleContainer extends StatelessWidget {
+  final List<String> recipes;
+  
+  RecipTitleContainer({required this.recipes});
+
   @override
   Widget build(BuildContext context) {
     return Container(padding: EdgeInsets.all(16),
@@ -81,7 +133,7 @@ class RecipTitleContainer extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ), // <- Added missing closing parenthesis and comma
-          Expanded(child: RecipeContainer()), // <- Make sure this widget exists
+          Expanded(child: RecipeContainer(recipes: recipes)), // <- Make sure this widget exists
         ],
       ),
     );
@@ -90,76 +142,39 @@ class RecipTitleContainer extends StatelessWidget {
 
 
 
-  class IngreContainer extends StatefulWidget {
-    @override
-    State<IngreContainer> createState() => _IngreContainerState();
-  }
 
-  class RecipeContainer extends StatefulWidget {
-    @override
-    State<RecipeContainer> createState() => _RecipeContainerState();
-  }
-
-  class _RecipeContainerState extends State<RecipeContainer> {
-      List<String> recips = [
-    "Preheat the oven to 375°F (190°C).",
-    "Chop onions, tomatoes, and garlic finely.",
-    "Heat 2 tablespoons of olive oil in a pan.",
-    "Add onions and sauté until golden brown.",
-    "Stir in garlic and cook for 1 more minute.",
-    "Add chopped tomatoes and simmer for 10 minutes.",
-    "Season with salt, pepper, and oregano.",
-    "Boil pasta in salted water until al dente.",
-    "Drain pasta and mix with the tomato sauce.",
-    "Grate parmesan cheese on top before serving.",
-    "Whisk eggs and milk together in a bowl.",
-    "Dip bread slices into egg mixture and fry until golden.",
-    "Melt butter in a pan and cook pancakes until bubbly.",
-    "Mix flour, sugar, and baking powder in a bowl.",
-    "Add milk and eggs to form a smooth batter.",
-    "Pour batter into a greased baking dish.",
-    "Bake for 30 minutes until golden and set.",
-    "Marinate chicken with lemon juice and spices.",
-    "Grill chicken on medium heat for 6–8 minutes each side.",
-    "Serve hot with rice or salad."
-  ];
-
-    @override 
-    Widget build(BuildContext context) {
-      return ListView.builder(
-        itemCount: recips.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(recips[index]),
-          );
-        },
-      );
-    }
-  } 
-
-  class _IngreContainerState extends State<IngreContainer> {
-    List<String> Ingres = [
-      'Spaghetti Carbonara',
-      'Chicken Alfredo',
-      'Beef Stroganoff',
-      'Vegetable Stir Fry',
-      'Tacos',
-      'Caesar Salad',
-      'Grilled Cheese Sandwich',
-      'Pancakes',
-      'Chocolate Chip Cookies',
-      'Apple Pie'
-    ];
+  class IngreContainer extends StatelessWidget {
+    final List<String> ingredients;
+    
+    IngreContainer({required this.ingredients});
 
     @override
     Widget build(BuildContext context) {
      return ListView.builder(
-      itemCount: Ingres.length,
+      itemCount: ingredients.length,
       itemBuilder: (context, index) {
         return ListTile(
-          title: Text(Ingres[index]),
+          title: Text(ingredients[index]),
         );
       },
     );
   }
+  }
+
+  class RecipeContainer extends StatelessWidget {
+    final List<String> recipes;
+    
+    RecipeContainer({required this.recipes});
+
+    @override 
+    Widget build(BuildContext context) {
+      return ListView.builder(
+        itemCount: recipes.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(recipes[index]),
+          );
+        },
+      );
+    }
   }

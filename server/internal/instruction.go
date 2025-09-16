@@ -1,8 +1,9 @@
 package scrape
+
 import (
-//	"fmt"
-	"os"
 	"bufio"
+	"fmt"
+	"os"
 	"strings"
 )
 
@@ -11,9 +12,15 @@ var tools []string = []string{}
 var timeMarkers []string = []string{}
 
 func AssignWordLists() {
-	cookingVerbs, _ = loadList("../dictionaries/verbs.txt")
-	tools, _ = loadList("../dictionaries/tools.txt")
-	timeMarkers, _ = loadList("../dictionaries/time.txt")
+	cookingVerbs, _ = loadList("dictionaries/verbs.txt")
+	tools, _ = loadList("dictionaries/tools.txt")
+	timeMarkers, _ = loadList("dictionaries/time.txt")
+
+	fmt.Println("Printing Loaded Tools")
+	// Loop through the slice and print each word
+	for _, word := range tools {
+		fmt.Println(word)
+	}
 }
 
 func checkWordInArray(word string, array []string) bool {
@@ -25,8 +32,8 @@ func checkWordInArray(word string, array []string) bool {
 	return false
 }
 
-func IsInstruction(instructionParagraph string) bool{
-	var total int8= 0
+func IsInstruction(instructionParagraph string) bool {
+	var total int8 = 0
 	var confIns int8 = 0
 	newSlice := customSplit(instructionParagraph, []byte{';', '.'})
 	for _, ins := range newSlice {
@@ -44,40 +51,39 @@ func IsInstruction(instructionParagraph string) bool{
 	}
 }
 
-
 func loadList(filename string) ([]string, error) {
-    file, err := os.Open(filename)
-    if err != nil {
-        return nil, err
-    }
-    defer file.Close()
+	file, err := os.Open(filename)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
 
-    var words []string
-    scanner := bufio.NewScanner(file)
-    for scanner.Scan() {
-        words = append(words, scanner.Text())
-    }
-    return words, scanner.Err()
+	var words []string
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		words = append(words, scanner.Text())
+	}
+	return words, scanner.Err()
 }
 
 func checkSentence(ins string) bool {
 	targetsMet := 0
 	ins_arr := strings.Split(ins, " ")
 	if ins_arr[0] == "add" {
-		return true		//Chances are far more likely than not that it is a recipe
+		return true //Chances are far more likely than not that it is a recipe
 	}
 	for _, word := range ins_arr {
 		word = strings.ToLower(word)
-		if checkWordInArray(word, cookingVerbs){
-	//		fmt.Println(word)
+		if checkWordInArray(word, cookingVerbs) {
+			//		fmt.Println(word)
 			targetsMet += 2
 		}
-		if checkWordInArray(word, tools){
-	//		fmt.Println(word)
+		if checkWordInArray(word, tools) {
+			//		fmt.Println(word)
 			targetsMet += 1
 		}
-		if checkWordInArray(word, timeMarkers){
-	//		fmt.Println(word)
+		if checkWordInArray(word, timeMarkers) {
+			//		fmt.Println(word)
 			targetsMet += 1
 		}
 	}
@@ -101,7 +107,7 @@ func customSplit(input string, delimters []byte) []string {
 	return newSlice
 }
 
-func checkInDelimiter(c rune, delim []byte) bool{
+func checkInDelimiter(c rune, delim []byte) bool {
 	for _, char := range delim {
 		if char == byte(c) {
 			return true

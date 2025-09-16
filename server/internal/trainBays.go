@@ -1,56 +1,57 @@
 package scrape
 
 import (
-	"fmt"
-	"github.com/jbrukh/bayesian"
-	"os"
 	"bufio"
-	"strings"
+	"fmt"
+	"os"
 	"strconv"
+	"strings"
+
+	"github.com/jbrukh/bayesian"
 )
 
 const (
 	Good bayesian.Class = "Rep"
-	Bad bayesian.Class = "NotRep"
+	Bad  bayesian.Class = "NotRep"
 )
 
 var RecipeWords map[string]int = make(map[string]int)
-var ValueMaps = map[int]string{0:"Rep", 1:"NotRep"}
+var ValueMaps = map[int]string{0: "Rep", 1: "NotRep"}
 
 func isNumeric(s string) bool {
 	_, err := strconv.ParseFloat(s, 64) // Try to parse as a float64
 	return err == nil
 }
 
-func EvaluateSentence(Sentence string) bool{
+func EvaluateSentence(Sentence string) bool {
 	points := 0
 	sentence := deleteBadCharacters(strings.ToLower(Sentence))
 	senArray := strings.Split(sentence, " ")
 	amountWord := len(senArray)
 
 	if amountWord < 2 {
-	 points += 2
-	}else if  amountWord < 6 {
-		points += 1			//Inbetween these answers, it just doesn't gain a point
-	}else if amountWord > 10{
+		points += 2
+	} else if amountWord < 6 {
+		points += 1 //Inbetween these answers, it just doesn't gain a point
+	} else if amountWord > 10 {
 		return false
 	}
 
 	for _, word := range senArray {
-		if RecipeWords[word] == 1 || isNumeric(word){
+		if RecipeWords[word] == 1 || isNumeric(word) {
 			points += 1
 		}
 	}
 
-	if points > 3{
+	if points > 3 {
 		return true
-	}else{
+	} else {
 		return false
 	}
 }
 
 func deleteBadCharacters(sentence string) string {
-	strings.NewReplacer("(", " ", ")"," ", "!", "", "#", "")
+	strings.NewReplacer("(", " ", ")", " ", "!", "", "#", "")
 	return strings.ReplaceAll(sentence, ".", "")
 }
 
@@ -59,7 +60,7 @@ func LoadPositives() {
 	RecipeWords = fileIntoPositiveWords("dictionaries/ingre.txt", RecipeWords)
 }
 
-func fileIntoPositiveWords(path string, mapTo map[string]int) map[string]int{
+func fileIntoPositiveWords(path string, mapTo map[string]int) map[string]int {
 	f1, _ := os.Open(path)
 
 	scanner := bufio.NewScanner(f1)
@@ -70,12 +71,11 @@ func fileIntoPositiveWords(path string, mapTo map[string]int) map[string]int{
 		}
 	}
 	if err := scanner.Err(); err != nil {
-	//	fmt.Println("Error reading file:", err)
+		//	fmt.Println("Error reading file:", err)
 	}
 
 	return mapTo
 }
-
 
 func main_hide() {
 	notIngri := generateStringSlices("notRecipe.txt")
@@ -97,9 +97,13 @@ func main_hide() {
 	for key, value := range testData {
 		total++
 		_, likely, _ := classifier.LogScores(strings.Split(key, " "))
-		if value == "Rep"{ings += 1} else if value == "notRep"{notIngs += 1}
+		if value == "Rep" {
+			ings += 1
+		} else if value == "notRep" {
+			notIngs += 1
+		}
 
-		if value == ValueMaps[likely] {		//Since Classifier returns an array
+		if value == ValueMaps[likely] { //Since Classifier returns an array
 			correct++
 		} else {
 			fmt.Println("Incorrect")
@@ -146,7 +150,7 @@ func generateStringSlices(fileName string) []string {
 
 func SeperateTest(line string) []string {
 	parts := strings.Split(line, ":")
-	for i:= 0;i<len(parts);i++{
+	for i := 0; i < len(parts); i++ {
 		parts[i] = strings.TrimSpace(parts[i])
 	}
 	if len(parts) == 2 {
@@ -154,20 +158,19 @@ func SeperateTest(line string) []string {
 	} else if len(parts) > 2 {
 		toRet := make([]string, 2)
 		strBuild := strings.Builder{}
-		for i := 0; i < len(parts) -1; i++ {
+		for i := 0; i < len(parts)-1; i++ {
 			strBuild.WriteString(parts[i])
-			if i < len(parts) -2 {
+			if i < len(parts)-2 {
 				strBuild.WriteString(":")
 			}
 		}
 		toRet[0] = strBuild.String()
 		toRet[1] = parts[len(parts)-1]
 		return toRet
-	}else {
+	} else {
 		return []string{"error", ""}
 	}
 }
-
 
 func LoadTesting(fileName string) map[string]string {
 	var testData = make(map[string]string)
