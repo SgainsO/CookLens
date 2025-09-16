@@ -37,8 +37,8 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: Scaffold(
-        body: MasterWidget(),
+      home: Row(
+        children: [Expanded(child: MasterWidget())],
       ),
     );
   }
@@ -61,16 +61,34 @@ class _MasterWidgetState extends State<MasterWidget>{
 
 
   fetchAllData() async {
-    final response = await http.get(Uri.parse('http://127.0.0.1:8080/scrape'));
-    final data = json.decode(response.body);
-    setState(() {
-      allData = {
-        'recipe': List<String>.from(data['recipe']),
-        'ingredients': List<String>.from(data['ingredients'])
-      };
-      isLoading = false;
-    });
-
+    try {
+      print('Making API call to http://127.0.0.1:8080/scrape');
+      final response = await http.get(Uri.parse('http://127.0.0.1:8080/scrape'));
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+      
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        setState(() {
+          allData = {
+            'recipe': List<String>.from(data['recipe']),
+            'ingredients': List<String>.from(data['ingredients'])
+          };
+          isLoading = false;
+        });
+        print('Data loaded successfully');
+      } else {
+        print('Error: HTTP ${response.statusCode}');
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      print('Exception occurred: $e');
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
   @override
   Widget build(BuildContext context)
