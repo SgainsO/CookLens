@@ -11,7 +11,7 @@ import (
 func main() {
 	app := fiber.New()
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     "*",
+		AllowOrigins:     "http://localhost:3500",
 		AllowMethods:     "*",
 		AllowHeaders:     "*",
 		AllowCredentials: true,
@@ -31,5 +31,5 @@ func main() {
 			"recipe":      recipe,
 		})
 	})
-	app.Listen(":8080")
+	app.Listen(":3500")
 }
