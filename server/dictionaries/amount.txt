@@ -44,6 +44,7 @@ knob
 clove
 cloves
 head
+flakes
 bunch
 bunches
 stalk
@@ -108,7 +109,9 @@ grams
 kilograms
 liters
 milliliters
+teaspoon
 teaspoons
+tablespoon
 tablespoons
 whole
 half

@@ -7,16 +7,25 @@ import 'dart:convert';
 class RecipIng extends StatelessWidget {
   const RecipIng({super.key});
 
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    // Extract the arguments
+    final arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final link = arguments?['link'] as String? ?? '';
+    
     return Row(
-      children: [Expanded(child: MasterWidget())],
+      children: [Expanded(child: MasterWidget(link: link))],
     );
   }
 }
 
 class MasterWidget extends StatefulWidget {
+  final String link;
+  
+  const MasterWidget({required this.link});
+  
   @override
   _MasterWidgetState createState() => _MasterWidgetState(); 
 }
@@ -34,8 +43,9 @@ class _MasterWidgetState extends State<MasterWidget>{
 
   fetchAllData() async {
     try {
-      print('Making API call to http://127.0.0.1:3500/scrape');
-      final response = await http.get(Uri.parse('http://127.0.0.1:3500/scrape'));
+      final url = 'http://10.0.2.2:3500/scrape?url=${Uri.encodeComponent(widget.link)}';
+      print('Making API call to $url');
+      final response = await http.get(Uri.parse(url));
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.body}');
       

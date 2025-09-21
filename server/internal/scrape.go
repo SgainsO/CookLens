@@ -80,6 +80,7 @@ func ParseRecipeFromURL(url string, ings *[]ItemHolder, recipe *[]ItemHolder) er
 		trimmedText := strings.TrimSpace(e.Text)
 		if trimmedText != "" {
 			if IsIngredient(trimmedText) {
+				fmt.Printf("Possible Ingredient Found: %s\n", trimmedText)
 				memory.AddToMemory(trimmedText, 1, itemNumber)
 				fmt.Printf("%s registered!\n", trimmedText)
 			} else if IsInstruction(trimmedText) {
@@ -101,7 +102,7 @@ func ParseRecipeFromURL(url string, ings *[]ItemHolder, recipe *[]ItemHolder) er
 						*recipe = AddItemToSlice(item.item, item.number, *recipe)
 					}
 				}
-				fmt.Printf("Before entering\n")
+				//	fmt.Printf("Before entering\n")
 				leftoverPossible = handleLeftoversLocal(leftoverPossible, itemNumber, &memory, &leftovers, ings, recipe)
 				memory.ClearMemory()
 			}
@@ -120,6 +121,7 @@ func ParseRecipeFromURL(url string, ings *[]ItemHolder, recipe *[]ItemHolder) er
 func Scrape(url string) ([]string, []string, bool) {
 	var ings []ItemHolder = []ItemHolder{}
 	var recipe []ItemHolder = []ItemHolder{}
+	success := true
 
 	fmt.Println("Input a Link you want to find the recipe of!")
 	err := ParseRecipeFromURL(url, &ings, &recipe)
@@ -136,13 +138,16 @@ func Scrape(url string) ([]string, []string, bool) {
 	for ind := 0; ind < len(recipe); ind++ {
 		ret_rec = append(ret_rec, recipe[ind].item)
 	}
+	if len(ings) == 0 || len(recipe) == 0 {
+		success = false
+	}
 
 	fmt.Println("Ended search")
 	PrintAllItemHolders(ings)
 	fmt.Println("-----------------")
 	PrintAllItemHolders(recipe)
 
-	return ret_ings, ret_rec, true
+	return ret_ings, ret_rec, success
 }
 
 func PrintAllInSlice(s []string) {
@@ -166,7 +171,7 @@ func putAllInArrayIntoSlice(list []string, array []string) {
 func handleLeftoversLocal(leftoverSet bool, currentItemNumber int, memory *Memory, leftovers *Memory, ings *[]ItemHolder, recipe *[]ItemHolder) bool {
 
 	//This patch runs first, will always be wrong
-	fmt.Printf("%d %d %d correct", leftoverSet, memory.Amt_Correct(2), leftovers.Amt_Correct(2))
+	//	fmt.Printf("%d %d %d correct", leftoverSet, memory.Amt_Correct(2), leftovers.Amt_Correct(2))
 	if leftoverSet {
 		for kind := int8(1); kind <= 2; kind++ {
 			for i := 0; i < memory.Amt_Correct(kind); i++ {

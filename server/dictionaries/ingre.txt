@@ -38,6 +38,7 @@ anchovies
 anchovy
 anise
 anises
+all-purpose
 apple
 apples
 apricot
@@ -195,6 +196,7 @@ crawfishes
 cream
 crimini
 criminis
+minced
 cubeb
 cubebs
 cucumber
@@ -486,6 +488,7 @@ peanutoil
 peanutoils
 peanuts
 pear
+stock
 pears
 peas
 pecan
@@ -524,6 +527,8 @@ porks
 portobello
 portobelloes
 potato
+peeled
+quartered
 potatoes
 powder
 powders

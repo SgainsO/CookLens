@@ -19,7 +19,36 @@ var RecipeWords map[string]int = make(map[string]int)
 var ValueMaps = map[int]string{0: "Rep", 1: "NotRep"}
 
 func isNumeric(s string) bool {
-	_, err := strconv.ParseFloat(s, 64) // Try to parse as a float64
+	// Check for fraction characters
+	fractionChars := map[rune]bool{
+		'¼': true, // quarter
+		'½': true, // half
+		'¾': true, // three quarters
+		'⅓': true, // one third
+		'⅔': true, // two thirds
+		'⅕': true, // one fifth
+		'⅖': true, // two fifths
+		'⅗': true, // three fifths
+		'⅘': true, // four fifths
+		'⅙': true, // one sixth
+		'⅚': true, // five sixths
+		'⅛': true, // one eighth
+		'⅜': true, // three eighths
+		'⅝': true, // five eighths
+		'⅞': true, // seven eighths
+	}
+
+	// If the string is a single character and it's a fraction, return true
+	if len(s) == 1 {
+		for _, char := range s {
+			if fractionChars[char] {
+				return true
+			}
+		}
+	}
+
+	// Otherwise try to parse as a float64
+	_, err := strconv.ParseFloat(s, 64)
 	return err == nil
 }
 
@@ -43,7 +72,7 @@ func EvaluateSentence(Sentence string) bool {
 		}
 	}
 
-	if points > 3 {
+	if points >= 3 {
 		return true
 	} else {
 		return false
@@ -75,57 +104,6 @@ func fileIntoPositiveWords(path string, mapTo map[string]int) map[string]int {
 	}
 
 	return mapTo
-}
-
-func main_hide() {
-	notIngri := generateStringSlices("notRecipe.txt")
-	Ingri := generateStringSlices("recipe.txt")
-
-	classifier := bayesian.NewClassifier(Good, Bad)
-	classifier.Learn(notIngri, Bad)
-	classifier.Learn(Ingri, Good)
-
-	var correct int16 = 0
-	var Incorrect int16 = 0
-	var total int16 = 0
-
-	var ings int8 = 0
-	notIngs := 0
-
-	testData := LoadTesting("test.txt")
-
-	for key, value := range testData {
-		total++
-		_, likely, _ := classifier.LogScores(strings.Split(key, " "))
-		if value == "Rep" {
-			ings += 1
-		} else if value == "notRep" {
-			notIngs += 1
-		}
-
-		if value == ValueMaps[likely] { //Since Classifier returns an array
-			correct++
-		} else {
-			fmt.Println("Incorrect")
-			fmt.Printf("Given Value: %s\n", key)
-			fmt.Printf("Given Results: %s Model Output: %s\n", value, ValueMaps[likely])
-			fmt.Printf("---------------\n")
-			Incorrect++
-		}
-	}
-
-	fmt.Printf("Amount of Ings: %d\n", ings)
-	fmt.Printf("Amount of notIngs: %d\n", notIngs)
-	fmt.Printf("Accuracy: %d/%d\n", correct, total)
-	fmt.Printf("Incorrect: %d/%d\n", Incorrect, total)
-	classifier.WriteToFile("model/model.mo")
-}
-
-func IsIngredientOLD(input string) bool {
-	classifier, _ := bayesian.NewClassifierFromFile("model/model.mo")
-	parts := strings.Split(input, " ")
-	_, likely, _ := classifier.LogScores(parts)
-	return likely == 0
 }
 
 func IsIngredient(input string) bool {
