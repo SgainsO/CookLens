@@ -13,6 +13,7 @@ whisk
 knife
 colander
 ladle
+platter
 tongs
 peeler
 grater

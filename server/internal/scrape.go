@@ -55,7 +55,8 @@ func (m *Memory) ClearMemory() {
 
 // ParseRecipeFromURL extracts ingredients and recipe steps from a URL
 // This function is safe for use in coroutines as it uses local variables
-func ParseRecipeFromURL(url string, ings *[]ItemHolder, recipe *[]ItemHolder) error {
+func ParseRecipeFromURL(url string, ings *[]ItemHolder,
+	recipe *[]ItemHolder, allInserts *[]string) error {
 	AssignWordLists()
 	LoadPositives()
 
@@ -76,6 +77,7 @@ func ParseRecipeFromURL(url string, ings *[]ItemHolder, recipe *[]ItemHolder) er
 	})
 
 	c.OnHTML("li", func(e *colly.HTMLElement) {
+		*allInserts = append(*allInserts, e.Text)
 		itemNumber++
 		trimmedText := strings.TrimSpace(e.Text)
 		if trimmedText != "" {
@@ -118,26 +120,49 @@ func ParseRecipeFromURL(url string, ings *[]ItemHolder, recipe *[]ItemHolder) er
 	return nil
 }
 
+func DeGapifyArray(allExamples []string, toCheck []ItemHolder) []string {
+	lastCheck := 0
+	var toRet []string
+	for _, value := range toCheck {
+		if lastCheck-value.number > 1 {
+			for i := lastCheck + 1; i < value.number; i++ {
+				toRet = append(toRet, allExamples[i])
+			}
+		}
+		toRet = append(toRet, value.item)
+		lastCheck = value.number
+	}
+
+	return toRet
+}
+
 func Scrape(url string) ([]string, []string, bool) {
+	listScripts := []string{}
 	var ings []ItemHolder = []ItemHolder{}
 	var recipe []ItemHolder = []ItemHolder{}
 	success := true
 
 	fmt.Println("Input a Link you want to find the recipe of!")
-	err := ParseRecipeFromURL(url, &ings, &recipe)
+	err := ParseRecipeFromURL(url, &ings, &recipe, &listScripts)
 	if err != nil {
 		fmt.Printf("Error parsing recipe: %v\n", err)
 		return []string{}, []string{}, false
 	}
 	var ret_ings []string = []string{}
 	var ret_rec []string = []string{}
-	for ind := 0; ind < len(ings); ind++ {
-		ret_ings = append(ret_ings, ings[ind].item)
-	}
+	/*
+		for ind := 0; ind < len(ings); ind++ {
+			ret_ings = append(ret_ings, ings[ind].item)
+		}
 
-	for ind := 0; ind < len(recipe); ind++ {
-		ret_rec = append(ret_rec, recipe[ind].item)
-	}
+		for ind := 0; ind < len(recipe); ind++ {
+			ret_rec = append(ret_rec, recipe[ind].item)
+		}
+	*/
+
+	ret_ings = DeGapifyArray(listScripts, ings)
+	ret_rec = DeGapifyArray(listScripts, recipe)
+
 	if len(ings) == 0 || len(recipe) == 0 {
 		success = false
 	}

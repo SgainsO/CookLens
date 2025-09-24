@@ -17,10 +17,6 @@ func AssignWordLists() {
 	timeMarkers, _ = loadList("dictionaries/time.txt")
 
 	fmt.Println("Printing Loaded Tools")
-	// Loop through the slice and print each word
-	for _, word := range tools {
-		fmt.Println(word)
-	}
 }
 
 func checkWordInArray(word string, array []string) bool {
@@ -37,14 +33,20 @@ func IsInstruction(instructionParagraph string) bool {
 	var confIns int8 = 0
 	newSlice := customSplit(instructionParagraph, []byte{';', '.'})
 	for _, ins := range newSlice {
+		fmt.Printf("Instruction: %s", ins)
 		if checkSentence(ins) {
 			confIns++
+			fmt.Printf(": %d\n", 1)
+		} else {
+			fmt.Printf(": %d\n", 0)
 		}
 		total++
 	}
+
 	strug := float32(confIns) / float32(total)
+	fmt.Printf("Instruction Confidence: %.2f\n", strug)
 	//fmt.Println(strug)
-	if strug > float32(0.5) {
+	if strug >= float32(0.5) {
 		return true
 	} else {
 		return false
@@ -66,31 +68,40 @@ func loadList(filename string) ([]string, error) {
 	return words, scanner.Err()
 }
 
+func refineWord(word string) string {
+	word = strings.ToLower(word)
+	refined := strings.TrimRight(word, ",.!?;:")
+	return refined
+}
+
 func checkSentence(ins string) bool {
 	targetsMet := 0
 	ins_arr := strings.Split(ins, " ")
 	if ins_arr[0] == "add" {
 		return true //Chances are far more likely than not that it is a recipe
 	}
+	fmt.Print("\nWords Found: ")
 	for _, word := range ins_arr {
-		word = strings.ToLower(word)
+		word = refineWord(word)
+
 		if checkWordInArray(word, cookingVerbs) {
+			fmt.Printf("%s ", word)
 			//		fmt.Println(word)
 			targetsMet += 2
 		}
 		if checkWordInArray(word, tools) {
+			fmt.Printf("%s ", word)
 			//		fmt.Println(word)
 			targetsMet += 1
 		}
 		if checkWordInArray(word, timeMarkers) {
 			//		fmt.Println(word)
+			fmt.Printf("%s ", word)
 			targetsMet += 1
 		}
 	}
-	if targetsMet >= 3 {
-		return true
-	}
-	return false
+
+	return targetsMet >= 3
 }
 
 func customSplit(input string, delimters []byte) []string {
