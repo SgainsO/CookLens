@@ -73,7 +73,8 @@ func main() {
 	app.Get("/hello", func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{"message": "Hello, world!"})
 	})
-
+	// https://www.delish.com/cooking/recipe-ideas/a46330/skillet-sicilian-chicken-recipe/
+	// https://www.foodnetwork.com/recipes/ground-turkey-enchilada-stir-fry-with-couscous-3416321
 	app.Get("/scrape", func(c *fiber.Ctx) error {
 		PassedInLink := c.Query("url")
 		ings, recipe, succes := scrape.Scrape(PassedInLink)

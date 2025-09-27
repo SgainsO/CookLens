@@ -18,6 +18,13 @@ type Memory struct {
 	Item_Type [3]int8 //0  is not Ing, 1 is Ing
 }
 
+type OrderScraper struct {
+	startedIng    bool
+	ingsActivated bool
+	startedIns    bool
+	repsActivated bool
+}
+
 func (m Memory) Amt_Correct(typeNum int8) int {
 	newAmt := 0
 	for _, value := range m.Item_Type {
@@ -53,10 +60,31 @@ func (m *Memory) ClearMemory() {
 	// fmt.Println("Memory cleared")
 }
 
+func (os *OrderScraper) ParseOrder(url string, ings *[]ItemHolder,
+	recipe *[]ItemHolder) {
+
+	//headers := list[string]{"h2", "h3", "h4"}
+	//typeMapping := map[string]string{}
+
+	c := colly.NewCollector()
+	c.OnRequest(func(r *colly.Request) {
+		fmt.Println("Visiting", r.URL.String())
+	})
+
+	c.OnError(func(_ *colly.Response, err error) {
+		fmt.Println("Something went wrong:", err)
+	})
+
+	c.Visit(url)
+
+}
+
 // ParseRecipeFromURL extracts ingredients and recipe steps from a URL
 // This function is safe for use in coroutines as it uses local variables
 func ParseRecipeFromURL(url string, ings *[]ItemHolder,
 	recipe *[]ItemHolder, allInserts *[]string) error {
+	savedInstructions := map[string]int{}
+
 	AssignWordLists()
 	LoadPositives()
 
@@ -76,7 +104,7 @@ func ParseRecipeFromURL(url string, ings *[]ItemHolder,
 		fmt.Println("Something went wrong:", err)
 	})
 
-	c.OnHTML("li", func(e *colly.HTMLElement) {
+	c.OnHTML("li,h3,h2", func(e *colly.HTMLElement) {
 		*allInserts = append(*allInserts, e.Text)
 		itemNumber++
 		trimmedText := strings.TrimSpace(e.Text)
@@ -85,7 +113,7 @@ func ParseRecipeFromURL(url string, ings *[]ItemHolder,
 				fmt.Printf("Possible Ingredient Found: %s\n", trimmedText)
 				memory.AddToMemory(trimmedText, 1, itemNumber)
 				fmt.Printf("%s registered!\n", trimmedText)
-			} else if IsInstruction(trimmedText) {
+			} else if IsInstruction(trimmedText, &savedInstructions) {
 				memory.AddToMemory(trimmedText, 2, itemNumber)
 				fmt.Printf("%s INSTRUCTION \n", trimmedText)
 			} else {
@@ -136,6 +164,20 @@ func DeGapifyArray(allExamples []string, toCheck []ItemHolder) []string {
 	return toRet
 }
 
+func checkForIngHeader(s string) bool {
+	if strings.Contains(s, "Ingredients") {
+		return true
+	}
+	return false
+}
+
+func checkForInstructionHeader(s string) bool {
+	if strings.Contains(s, "Instructions") {
+		return true
+	}
+	return false
+}
+
 func Scrape(url string) ([]string, []string, bool) {
 	listScripts := []string{}
 	var ings []ItemHolder = []ItemHolder{}
@@ -150,15 +192,10 @@ func Scrape(url string) ([]string, []string, bool) {
 	}
 	var ret_ings []string = []string{}
 	var ret_rec []string = []string{}
-	/*
-		for ind := 0; ind < len(ings); ind++ {
-			ret_ings = append(ret_ings, ings[ind].item)
-		}
 
-		for ind := 0; ind < len(recipe); ind++ {
-			ret_rec = append(ret_rec, recipe[ind].item)
-		}
-	*/
+	PrintAllItemHolders(recipe)
+	fmt.Println("De-gapifying")
+	//Convert from ItemHolder to string array, filling in gaps with other scraped text
 
 	ret_ings = DeGapifyArray(listScripts, ings)
 	ret_rec = DeGapifyArray(listScripts, recipe)
@@ -167,7 +204,7 @@ func Scrape(url string) ([]string, []string, bool) {
 		success = false
 	}
 
-	fmt.Println("Ended search")
+	fmt.Println("Ended Search")
 	PrintAllItemHolders(ings)
 	fmt.Println("-----------------")
 	PrintAllItemHolders(recipe)

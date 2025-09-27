@@ -28,14 +28,21 @@ func checkWordInArray(word string, array []string) bool {
 	return false
 }
 
-func IsInstruction(instructionParagraph string) bool {
+func IsInstruction(instructionParagraph string, savedInstructions *map[string]int) bool {
 	var total int8 = 0
 	var confIns int8 = 0
+	var repitions int8 = 0
+
+	fmt.Printf("Whole Paragraph: %s\n", instructionParagraph)
+
 	newSlice := customSplit(instructionParagraph, []byte{';', '.'})
 	for _, ins := range newSlice {
 		fmt.Printf("Instruction: %s", ins)
-		if checkSentence(ins) {
+		if _, exists := (*savedInstructions)[ins]; exists {
+			repitions++
+		} else if checkSentence(ins) {
 			confIns++
+			(*savedInstructions)[ins] = 1
 			fmt.Printf(": %d\n", 1)
 		} else {
 			fmt.Printf(": %d\n", 0)
@@ -44,9 +51,13 @@ func IsInstruction(instructionParagraph string) bool {
 	}
 
 	strug := float32(confIns) / float32(total)
+	strugReps := float32(repitions) / float32(total)
 	fmt.Printf("Instruction Confidence: %.2f\n", strug)
 	//fmt.Println(strug)
-	if strug >= float32(0.5) {
+	// Try not to include Repitions
+	if strugReps >= float32(0.33) {
+		return false
+	} else if strug >= float32(0.5) {
 		return true
 	} else {
 		return false
